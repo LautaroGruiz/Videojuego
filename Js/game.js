@@ -26,19 +26,28 @@ const startGame = () => {
   game.font = elementsSize + "px Verdana";
   game.textAlign = "end";
 
-  const map = maps[1];
+  const map = maps[2]; // Hacemos referencia a nuestro arreglo maps que contiene los distintos niveles.
+  /*
+  Filas del mapa.
+  Limpiamos espacios con TRIM.
+  Con SPLIT(\n) creamos un nuevo array en donde se crea un elemento diferente cuando se encuntra un salto de linea
+  */
   const mapRows = map.trim().split("\n");
+  /*
+  Creamos un array(.map) a partir de otro array(mapRows)
+  Existe una lista de Filas, donde cada fila tendra como elemento otra Lista.
+  En esta ultima lista, cada elemento hace referencia a las columnas
+  */
   const mapRowsCol = mapRows.map((row) => row.trim().split(""));
 
-  for (let row = 1; row <= 10; row++) {
-    for (let col = 1; col <= 10; col++) {
-      game.fillText(
-        emojis[mapRowsCol[row - 1][col - 1]],
-        elementsSize * col + 15,
-        elementsSize * row
-      );
-    }
-  }
+  mapRowsCol.forEach((row, rowI) => {
+    row.forEach((col, colI) => {
+      const emoji = emojis[col];
+      const posX = elementsSize * (colI + 1.3);
+      const posY = elementsSize * (rowI + 0.95);
+      game.fillText(emoji, posX, posY);
+    });
+  });
 };
 
 window.addEventListener("load", setCanvasSize);
