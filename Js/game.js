@@ -1,5 +1,9 @@
 const canvas = document.querySelector("#game");
 const game = canvas.getContext("2d"); // Eje X & Y.
+const btnUp = document.querySelector("#up");
+const btnLeft = document.querySelector("#left");
+const btnRight = document.querySelector("#right");
+const btnDown = document.querySelector("#down");
 
 let canvasSize;
 let elementsSize;
@@ -50,5 +54,18 @@ const startGame = () => {
   });
 };
 
+const moveByKeys = (e) => {
+  if (e.key == "ArrowUp") moveUp;
+  else if (e.key == "ArrowLeft") moveLeft;
+  else if (e.key == "ArrowRight") moveRight;
+  else if (e.key == "ArrowDown") moveDown;
+};
+
+const moveUp = () => {};
+const moveLeft = () => {};
+const moveRight = () => {};
+const moveDown = () => {};
+
 window.addEventListener("load", setCanvasSize);
 window.addEventListener("resize", setCanvasSize);
+window.addEventListener("keydown", moveByKeys);
