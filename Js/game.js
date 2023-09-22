@@ -12,6 +12,11 @@ let playerPosition = {
   y: undefined,
 };
 
+const giftPosition = {
+  x: undefined,
+  y: undefined,
+};
+
 const setCanvasSize = () => {
   if (window.innerHeight > window.innerWidth) {
     canvasSize = window.innerWidth * 0.8;
@@ -61,6 +66,9 @@ const startGame = () => {
           playerPosition.x = posX;
           playerPosition.y = posY;
         }
+      } else if (col === "I") {
+        giftPosition.x = posX;
+        giftPosition.y = posY;
       }
       game.fillText(emoji, posX, posY);
     });
@@ -69,6 +77,14 @@ const startGame = () => {
 };
 
 const movePlayer = () => {
+  const giftCollistionX =
+    playerPosition.x.toFixed(3) == giftPosition.x.toFixed(3); // Usamos toFixed para evitar conflictos con exactitud en numeros decimales
+  const giftCollistionY =
+    playerPosition.Y.toFixed(3) == giftPosition.x.toFixed(3);
+  const giftCollistion = giftCollistionX && giftCollistionY;
+  if (giftCollistion) {
+    console.log("Subiste de nivel");
+  }
   game.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y);
 };
 
