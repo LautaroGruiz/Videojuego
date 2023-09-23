@@ -7,6 +7,7 @@ const btnDown = document.querySelector("#down");
 
 let canvasSize;
 let elementsSize;
+let level = 0;
 let playerPosition = {
   x: undefined,
   y: undefined,
@@ -16,6 +17,8 @@ const giftPosition = {
   x: undefined,
   y: undefined,
 };
+
+let enemyPositions = [];
 
 const setCanvasSize = () => {
   if (window.innerHeight > window.innerWidth) {
@@ -39,7 +42,13 @@ const startGame = () => {
   game.font = elementsSize + "px Verdana";
   game.textAlign = "end";
 
-  const map = maps[0]; // Hacemos referencia a nuestro arreglo maps que contiene los distintos niveles.
+  const map = maps[level]; // Hacemos referencia a nuestro arreglo maps que contiene los distintos niveles.
+
+  if (!map) {
+    gameWin();
+    return;
+  }
+  
   /*
   Filas del mapa.
   Limpiamos espacios con TRIM.
@@ -52,6 +61,8 @@ const startGame = () => {
   En esta ultima lista, cada elemento hace referencia a las columnas
   */
   const mapRowsCol = mapRows.map((row) => row.trim().split(""));
+
+  enemyPositions = []; // Cada vez que nos movemos limpiamos nuestros arreglos.
 
   game.clearRect(0, 0, canvasSize, canvasSize);
 
@@ -69,6 +80,11 @@ const startGame = () => {
       } else if (col === "I") {
         giftPosition.x = posX;
         giftPosition.y = posY;
+      } else if (col == "X") {
+        enemyPositions.push({
+          x: posX,
+          y: posY,
+        });
       }
       game.fillText(emoji, posX, posY);
     });
@@ -80,12 +96,34 @@ const movePlayer = () => {
   const giftCollistionX =
     playerPosition.x.toFixed(3) == giftPosition.x.toFixed(3); // Usamos toFixed para evitar conflictos con exactitud en numeros decimales
   const giftCollistionY =
-    playerPosition.Y.toFixed(3) == giftPosition.x.toFixed(3);
+    playerPosition.y.toFixed(3) == giftPosition.y.toFixed(3);
   const giftCollistion = giftCollistionX && giftCollistionY;
+
   if (giftCollistion) {
-    console.log("Subiste de nivel");
+    levelWin();
   }
+
+  const enemyCollision = enemyPositions.find((enemy) => {
+    const enemyCollisionX = enemy.x.toFixed(3) == playerPosition.x.toFixed(3);
+    const enemyCollisionY = enemy.y.toFixed(3) == playerPosition.y.toFixed(3);
+    return enemyCollisionX && enemyCollisionY;
+  });
+
+  if (enemyCollision) {
+    console.log("cochaste con bomba");
+  }
+
   game.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y);
+};
+
+const levelWin = () => {
+  console.log("win");
+  level++;
+  startGame();
+};
+
+const gameWin = () => {
+  console.log("game winner");
 };
 
 const moveByKeys = (e) => {
