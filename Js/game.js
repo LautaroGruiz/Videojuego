@@ -5,11 +5,17 @@ const btnLeft = document.querySelector("#left");
 const btnRight = document.querySelector("#right");
 const btnDown = document.querySelector("#down");
 const spanLives = document.querySelector("#lives");
+const spanTime = document.querySelector("#time");
+const spanRecord = document.querySelector("#record");
+const pResultado = document.querySelector("#resultado");
 
 let canvasSize;
 let elementsSize;
 let level = 0;
 let lives = 3;
+let timeStart;
+let timePLayer;
+let timeInterval;
 
 let playerPosition = {
   x: undefined,
@@ -52,6 +58,11 @@ const startGame = () => {
     return;
   }
 
+  if (!timeStart) {
+    timeStart = Date.now();
+    timeInterval = setInterval(showTime, 100);
+    showRecord();
+  }
   /*
   Filas del mapa.
   Limpiamos espacios con TRIM.
@@ -132,13 +143,27 @@ const levelFail = () => {
   if (lives <= 0) {
     level = 0;
     lives = 3;
+    timeStart = undefined;
   }
   playerPosition.x = undefined;
   playerPosition.y = undefined;
   startGame();
 };
 
-const gameWin = () => {};
+const gameWin = () => {
+  clearInterval(timeInterval);
+  const recordTime = localStorage.getItem("Record Time");
+  const playerTime = Date.now() - timeStart;
+  if (recordTime) {
+    if (recordTime >= playerTime) {
+      localStorage.setItem("Record Time", playerTime);
+      pResultado.innerHTML = "SUPERASTE EL RECORD"
+    }
+  } else {
+    localStorage.setItem("Record Time", playerTime);
+    pResultado.innerHTML = "No superaste el record anterior"
+  }
+};
 
 const showLives = () => {
   const heartArray = Array(lives).fill(emojis["HEART"]);
@@ -146,6 +171,14 @@ const showLives = () => {
   heartArray.forEach((heart) => {
     spanLives.append(heart);
   });
+};
+
+const showTime = () => {
+  spanTime.innerHTML = Date.now() - timeStart;
+};
+
+const showRecord = () => {
+  spanRecord.innerHTML = localStorage.getItem("Record Time");
 };
 
 const moveByKeys = (e) => {
