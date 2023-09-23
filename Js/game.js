@@ -4,10 +4,13 @@ const btnUp = document.querySelector("#up");
 const btnLeft = document.querySelector("#left");
 const btnRight = document.querySelector("#right");
 const btnDown = document.querySelector("#down");
+const spanLives = document.querySelector("#lives");
 
 let canvasSize;
 let elementsSize;
 let level = 0;
+let lives = 3;
+
 let playerPosition = {
   x: undefined,
   y: undefined,
@@ -48,7 +51,7 @@ const startGame = () => {
     gameWin();
     return;
   }
-  
+
   /*
   Filas del mapa.
   Limpiamos espacios con TRIM.
@@ -61,6 +64,8 @@ const startGame = () => {
   En esta ultima lista, cada elemento hace referencia a las columnas
   */
   const mapRowsCol = mapRows.map((row) => row.trim().split(""));
+
+  showLives();
 
   enemyPositions = []; // Cada vez que nos movemos limpiamos nuestros arreglos.
 
@@ -110,7 +115,7 @@ const movePlayer = () => {
   });
 
   if (enemyCollision) {
-    console.log("cochaste con bomba");
+    levelFail();
   }
 
   game.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y);
@@ -122,8 +127,25 @@ const levelWin = () => {
   startGame();
 };
 
-const gameWin = () => {
-  console.log("game winner");
+const levelFail = () => {
+  lives--;
+  if (lives <= 0) {
+    level = 0;
+    lives = 3;
+  }
+  playerPosition.x = undefined;
+  playerPosition.y = undefined;
+  startGame();
+};
+
+const gameWin = () => {};
+
+const showLives = () => {
+  const heartArray = Array(lives).fill(emojis["HEART"]);
+  spanLives.innerHTML = "";
+  heartArray.forEach((heart) => {
+    spanLives.append(heart);
+  });
 };
 
 const moveByKeys = (e) => {
