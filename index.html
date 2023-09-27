@@ -7,22 +7,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VideoGame</title>
     <link rel="stylesheet" href="./Styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 
 <body>
+    <div class="messages">
+        <span class="fondoEfento"></span>
+        <p class="vidasTexto">Vidas:<span id="lives"></span></p>
+        <p class="vidasTexto">Tiempo:<span id="time"></span></p>
+        <p class="vidasTexto">Record:<span id="record"></span></p>
+        <p id="resultado"></p>
+    </div>
     <div class="game-container">
         <canvas id="game"></canvas>
         <div class="btns">
-            <button id="up" onclick=moveUp()>Arriba</button>
-            <button id="left" onclick=moveLeft()>Izquierda</button>
-            <button id="right" onclick=moveRight()>Derecha</button>
-            <button id="down" onclick=moveDown()>Abajo</button>
-        </div>
-        <div class="messages">
-            <p>Vidas: <span id="lives"></span></p>
-            <p>Tiempo: <span id="time"></span></p>
-            <p>Record: <span id="record"></span></p>
-            <p id="resultado"></p>
+            <button id="up" onclick=moveUp()>🔼</button>
+            <button id="left" onclick=moveLeft()>🔽</button>
+            <button id="right" onclick=moveRight()>🔽</button>
+            <button id="down" onclick=moveDown()>🔽</button>
         </div>
     </div>
     <script src="./Js/map.js"></script>
