@@ -158,16 +158,28 @@ const gameWin = () => {
   clearInterval(timeInterval);
   const recordTime = localStorage.getItem("Record Time");
   const playerTime = Date.now() - timeStart;
-  if (recordTime) {
-    if (recordTime >= playerTime) {
+
+  if (recordTime === null) {
+    localStorage.setItem("Record Time", playerTime);
+    pResultado.innerHTML = "¿Primera vez?";
+  } else {
+    if (playerTime < recordTime) {
       localStorage.setItem("Record Time", playerTime);
       pResultado.innerHTML = "SUPERASTE EL RECORD";
+    } else {
+      pResultado.innerHTML = "INTENTALO OTRA VEZ";
     }
-  } else {
-    localStorage.setItem("Record Time", playerTime);
-    pResultado.innerHTML = "No superaste el record anterior";
   }
+  
+  // Reinicia al primer nivel después de 2 segundos
+  setTimeout(() => {
+    level = 0;
+    lives = 3;
+    timeStart = undefined;
+    startGame();
+  }, 1000); // Espera 2 segundos antes de reiniciar
 };
+
 
 const showLives = () => {
   const heartArray = Array(lives).fill(emojis["HEART"]);
@@ -178,11 +190,34 @@ const showLives = () => {
 };
 
 const showTime = () => {
-  spanTime.innerHTML = Date.now() - timeStart;
+  const elapsedTime = Date.now() - timeStart;
+  const seconds = Math.floor((elapsedTime / 1000) % 60); // Calcula los segundos
+  const minutes = Math.floor((elapsedTime / 1000 / 60) % 60); // Calcula los minutos
+
+  // Formatea los segundos y minutos como cadenas con ceros a la izquierda si es necesario
+  const formattedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+
+  // Muestra el tiempo en el formato MM:SS en un elemento con el id "spanTime"
+  spanTime.innerHTML = `${formattedMinutes}:${formattedSeconds}`;
 };
 
 const showRecord = () => {
-  spanRecord.innerHTML = localStorage.getItem("Record Time");
+  const recordTimeMillis = localStorage.getItem("Record Time");
+  
+  if (recordTimeMillis !== null) {
+    const seconds = Math.floor((recordTimeMillis / 1000) % 60); // Calcula los segundos
+    const minutes = Math.floor((recordTimeMillis / 1000 / 60) % 60); // Calcula los minutos
+
+    // Formatea los segundos y minutos como cadenas con ceros a la izquierda si es necesario
+    const formattedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+
+    // Muestra el tiempo en el formato MM:SS en un elemento con el id "spanRecord"
+    spanRecord.innerHTML = `${formattedMinutes}:${formattedSeconds}`;
+  } else {
+    spanRecord.innerHTML = "N/A"; // Si no hay un récord, muestra "N/A" (No disponible)
+  }
 };
 
 const moveByKeys = (e) => {
