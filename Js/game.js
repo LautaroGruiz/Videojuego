@@ -257,3 +257,4 @@ const moveDown = () => {
 window.addEventListener("load", setCanvasSize);
 window.addEventListener("resize", setCanvasSize);
 window.addEventListener("keydown", moveByKeys);
+
